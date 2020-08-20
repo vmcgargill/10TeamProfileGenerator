@@ -1,0 +1,29 @@
+.body {
+    background-color: silver;
+}
+
+.team-heading {
+    color: white;
+    background-color: rgb(30, 30, 97);
+    box-shadow: 0 0 15px 4px;
+}
+
+.card {
+    height: 325px;
+    width: 300px;
+    display: block;
+    margin: 10px;
+    background-color: silver;
+    box-shadow: 0 0 5px 2px;
+}
+
+
+.card-header {
+    color: white;
+    background-color: rgb(139, 0, 0);
+    transition-duration: 0.5s;
+}
+
+.card-header:hover {
+    background-color: rgb(243, 71, 71);
+}
