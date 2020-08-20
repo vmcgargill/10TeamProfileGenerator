@@ -61,8 +61,9 @@ const InternQuestions = [
     }
 ]
 
-const init = () => {
-    inquirer.prompt(EmployeeQuestions).then((response) => {
+const init = async () => {
+
+    await inquirer.prompt(EmployeeQuestions).then((response) => {
         let name = response.name;
         let id = response.id;
         let email = response.email;
@@ -96,8 +97,8 @@ const init = () => {
     });
 }
 
-const GenerateEmployee = (array) => {
-    inquirer.prompt([
+const GenerateEmployee = async (array) => {
+    await inquirer.prompt([
         {
             type: "list",
             message: "Would you like to create another employee?",
@@ -107,13 +108,18 @@ const GenerateEmployee = (array) => {
                 "No"
             ]
         }
-    ]).then((response) => {
+    ]).then(async (response) => {
         var CreateAnotherEmployee = response.CreateEmployee;
 
-        if (CreateAnotherEmployee === 'Yes') {
+        if (await CreateAnotherEmployee === 'Yes') {
             init();
         } else if (CreateAnotherEmployee === 'No') {
-            fs.writeFile(outputPath, render(array), (err) => {
+
+            if (await !fs.existsSync(path)) {
+                fs.mkdirSync(OUTPUT_DIR)
+            }
+
+            await fs.writeFile(outputPath, render(array), (err) => {
         
                 if (err) {
                     return console.log(err);
