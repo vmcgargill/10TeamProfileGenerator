@@ -76,31 +76,41 @@ inquirer.prompt(EmployeeQuestions).then((response) => {
     if (role === 'Manager') {
         inquirer.prompt(ManagerQuestions).then((response) => {
             officeNumber = response.officeNumber;
-            let employee = new Manager.Manager(name, id, email, officeNumber);
+            let employee = new Manager(name, id, email, officeNumber);
             EmployeeArray.push(employee);
-            console.log(EmployeeArray);
+            renderHTML(EmployeeArray);
         })
     } else if (role === 'Engineer') {
         inquirer.prompt(EngineerQuestions).then((response) => {
             github = response.github;
-            let employee = new Engineer.Engineer(name, id, email, github);
+            let employee = new Engineer(name, id, email, github);
             EmployeeArray.push(employee);
-            console.log(EmployeeArray);
+            renderHTML(EmployeeArray);
         })
     } else if (role === 'Intern') {
         inquirer.prompt(InternQuestions).then((response) => {
             school = response.school;
-            let employee = new Intern.Intern(name, id, email, school);
+            let employee = new Intern(name, id, email, school);
             EmployeeArray.push(employee);
-            console.log(EmployeeArray);
+            renderHTML(EmployeeArray);
         })
     }
-})
+});
+
+// console.log(render(EmployeeArray));
 
 
-// function render() {
+var renderHTML = (array) => {
+    console.log(array)
+    fs.writeFile(outputPath, render(array), function(err) {
 
-// }
+        if (err) {
+            return console.log(err);
+        }
+    
+        console.log("Your team.html file has been created in the output folder.");
+    });
+}
 
 // init()
 
