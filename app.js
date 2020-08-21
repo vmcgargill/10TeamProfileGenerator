@@ -61,8 +61,32 @@ const InternQuestions = [
     }
 ]
 
-const init = async () => {
+const init = () => {
+    if (fs.existsSync(outputPath)) {
+        inquirer.prompt({
+            type: "list",
+            message: "It looks like the team.html file in the output directory already exists. Are you sure you want to overwrite it?",
+            name: "overwrite",
+            choices: [
+                "Yes",
+                "No"
+            ]
+        }).then(async (response) => {
 
+            let overwrite = response.overwrite;
+            if (await overwrite === 'Yes') {
+                inquirEmployee()
+            } else if (await overwrite === 'No') {
+                console.log("Your current team.html file in the output directory has not been overwritten. Please move the current team.html file somewhere else and try again or copy and paste the text somewhere then try again and overwrite it.")
+            }
+        })
+    } else {
+        console.log("Welcome to the team profile generator. Please enter your team information below:")
+        inquirEmployee()
+    }
+}
+
+const inquirEmployee = async () => {
     await inquirer.prompt(EmployeeQuestions).then((response) => {
         let name = response.name;
         let id = response.id;
@@ -112,14 +136,14 @@ const GenerateEmployee = async (array) => {
         var CreateAnotherEmployee = response.CreateEmployee;
 
         if (await CreateAnotherEmployee === 'Yes') {
-            init();
-        } else if (CreateAnotherEmployee === 'No') {
+            inquirEmployee();
+        } else if (await CreateAnotherEmployee === 'No') {
 
-            if (await !fs.existsSync(path)) {
+            if (!fs.existsSync(OUTPUT_DIR)) {
                 fs.mkdirSync(OUTPUT_DIR)
             }
-
-            await fs.writeFile(outputPath, render(array), (err) => {
+            
+            fs.writeFile(outputPath, render(array), (err) => {
         
                 if (err) {
                     return console.log(err);
@@ -127,16 +151,9 @@ const GenerateEmployee = async (array) => {
             
                 console.log("Your team.html file has been created in the output folder.");
             });
+
         }
     })
 }
 
 init()
-
-// After you have your html, you're now ready to create an HTML file using the HTML
-// returned from the `render` function. Now write it to a file named `team.html` in the
-// `output` folder. You can use the variable `outputPath` above target this location.
-
-// TODO:
-// Hint: you may need to check if the `output` folder exists and create it if it
-// does not.
