@@ -70,6 +70,21 @@ To run tests, simply run the following command:
 ```
 npm test
 ```
+
+## Mobile Responsiveness
+Using the [Bootstrap CSS framework](https://getbootstrap.com/), the app is responsive to defferent screen sizes and compatible for mobile devices. See the screen shots bellow as an example:
+
+### Large Screen:
+
+![Large Screen](./screenshots/Screenshot_1.png)
+
+### Medium Screen:
+
+![Medium Screen](./screenshots/Screenshot_2.png)
+
+### Small Screen:
+
+![Small Screen](./screenshots/Screenshot_3.png)
  
 ## Questions 
 If you have any questions feel free to contact: 
