@@ -9,6 +9,7 @@ const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 let EmployeeArray = new Array();
 
+// Array of inquirer questions that are prompted for all employees.
 const EmployeeQuestions = [
     {
         type: "input",
@@ -37,6 +38,7 @@ const EmployeeQuestions = [
     }
 ]
 
+// Array of inquirer question specifically for the manager class.
 const ManagerQuestions = [
     {
         type: "input",
@@ -45,6 +47,7 @@ const ManagerQuestions = [
     }
 ]
 
+// Array of inquirer question specifically for the engineer class.
 const EngineerQuestions = [
     {
         type: "input",
@@ -53,6 +56,7 @@ const EngineerQuestions = [
     }
 ]
 
+// Array of inquirer question specifically for the intern class.
 const InternQuestions = [
     {
         type: "input",
@@ -61,6 +65,7 @@ const InternQuestions = [
     }
 ]
 
+// Init function that initializes the app, checks if the team.html file already exists, and checks if the user is ok with overwriting that file if it does exist.
 const init = () => {
     if (fs.existsSync(outputPath)) {
         inquirer.prompt({
@@ -75,18 +80,20 @@ const init = () => {
 
             let overwrite = response.overwrite;
             if (await overwrite === 'Yes') {
-                inquirEmployee()
+                console.log("Welcome to the team profile generator. Please enter your team information below:")
+                inquirerEmployee()
             } else if (await overwrite === 'No') {
                 console.log("Your current team.html file in the output directory has not been overwritten. Please move the current team.html file somewhere else and try again or copy and paste the text somewhere then try again and overwrite it.")
             }
         })
     } else {
         console.log("Welcome to the team profile generator. Please enter your team information below:")
-        inquirEmployee()
+        inquirerEmployee()
     }
 }
 
-const inquirEmployee = async () => {
+// Inquierer Employee function that askes user a series of inquirer questions about the details of the employee, then pushes that employee object to the EmployeeArray.
+const inquirerEmployee = async () => {
     await inquirer.prompt(EmployeeQuestions).then((response) => {
         let name = response.name;
         let id = response.id;
@@ -101,27 +108,28 @@ const inquirEmployee = async () => {
                 officeNumber = response.officeNumber;
                 let employee = new Manager(name, id, email, officeNumber);
                 EmployeeArray.push(employee);
-                GenerateEmployee(EmployeeArray);
+                CreateHTML(EmployeeArray);
             })
         } else if (role === 'Engineer') {
             inquirer.prompt(EngineerQuestions).then((response) => {
                 github = response.github;
                 let employee = new Engineer(name, id, email, github);
                 EmployeeArray.push(employee);
-                GenerateEmployee(EmployeeArray);
+                CreateHTML(EmployeeArray);
             })
         } else if (role === 'Intern') {
             inquirer.prompt(InternQuestions).then((response) => {
                 school = response.school;
                 let employee = new Intern(name, id, email, school);
                 EmployeeArray.push(employee);
-                GenerateEmployee(EmployeeArray);
+                CreateHTML(EmployeeArray);
             })
         }
     });
 }
 
-const GenerateEmployee = async (array) => {
+// The Create HTML function that checks if the user would like to add an additional employee first, then creates an additional employee or creates the team.html file when the user is done adding employees.
+const CreateHTML = async (array) => {
     await inquirer.prompt([
         {
             type: "list",
@@ -136,9 +144,10 @@ const GenerateEmployee = async (array) => {
         var CreateAnotherEmployee = response.CreateEmployee;
 
         if (await CreateAnotherEmployee === 'Yes') {
-            inquirEmployee();
+            inquirerEmployee();
         } else if (await CreateAnotherEmployee === 'No') {
 
+            // If the output directory does not exist, then it creates the ouput directory for the user before creating the team.html file.
             if (!fs.existsSync(OUTPUT_DIR)) {
                 fs.mkdirSync(OUTPUT_DIR)
             }
@@ -156,4 +165,5 @@ const GenerateEmployee = async (array) => {
     })
 }
 
+// Run the init function as soon as node runs the app.js file.
 init()
