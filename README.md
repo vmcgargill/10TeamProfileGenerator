@@ -1,6 +1,6 @@
+# TeamProfileGenerator
+
 [![License: NPM](https://img.shields.io/badge/License-NPM%20Package-green.svg)](https://www.npmjs.com/)
- 
-# 10TeamProfileGenerator
  
 ## Description 
 A command line app that generated HTML pages of team profiles.
